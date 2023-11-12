@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: myapp.wsgi.handler
+      Runtime: python3.8
+      CodeUri: .
+      FunctionName: MyFunction
+      MemorySize: 512
+      Timeout: 30
+      Layers:
+        - arn:aws:lambda:Oregon:770693421928:layer:AWSLambda-Python38-SciPy1x:3
+
+Outputs:
+  MyFunction:
+    Description: "My Lambda Function ARN"
+    Value: !GetAtt MyFunction.Arn
