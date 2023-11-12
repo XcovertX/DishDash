@@ -1,8 +1,8 @@
-from django.urls import path
-from .views import recipe_list, recipe_detail
+from django.urls import include, path
+from .views import recipe_list, recipe_detail, home
 
 urlpatterns = [
-    path('', recipe_list, name='recipe_list'),
+    path('recipes/', recipe_list, name='recipe_list'),
     path('<int:pk>/', recipe_detail, name='recipe_detail'),
-    # Add other URL patterns for creating, updating, and deleting recipes
+    path('', home, name='home'), 
 ]
