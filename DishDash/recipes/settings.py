@@ -3,8 +3,13 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'your_secret_key'
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['dishdash.online', '54.166.213.92']
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000 # 1 year
+WSGI_APPLICATION = 'recipes.wsgi.application'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -13,10 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sslserver',
     'apps.recipes',
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'recipes.urls'
 
 TEMPLATES = [
     {
