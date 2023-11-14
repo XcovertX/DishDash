@@ -8,9 +8,9 @@ urlpatterns = [
     path('recipes/', include('apps.recipes.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += [
-        # Serve static and media files in development.
-        path('media/<path>', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-        path('static/<path>', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    ]
+#if settings.DEBUG:
+#    urlpatterns += [
+#        # Serve static and media files in development.
+#        path('media/<path>', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+#        path('static/<path>', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
+#    ]
