@@ -1,0 +1,16 @@
+<!-- profile.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Welcome to your profile, {{ user.username }}!</h2>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+  <a href="{% url 'logout' %}">Logout</a>
+{% endblock %}
