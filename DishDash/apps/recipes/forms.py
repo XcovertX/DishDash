@@ -27,5 +27,5 @@ class RatingForm(forms.ModelForm):
         fields = ['stars']
 
 class MyLoginForm(AuthenticationForm):
-    # You can add additional fields or customize as needed
     pass
+

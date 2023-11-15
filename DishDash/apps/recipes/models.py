@@ -8,9 +8,15 @@ class Recipe(models.Model):
     ingredients  = models.JSONField()
     instructions = models.JSONField()
     created_at   = models.DateTimeField(auto_now_add=True)
+    views        = models.IntegerField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     @property
     def average_rating(self):
         return self.rating_set.aggregate(Avg('stars'))['stars__avg']
+    
+    def increase_views(self):
+        self.views += 1
+        self.save()
 
     def __str__(self):
         return self.title

@@ -17,9 +17,12 @@
     {% endfor %}
   </ol>
   {% if user.is_authenticated %}
-    <p>Your Rating: {{ user_rating.stars }} stars</p>
-    <a href="{% url 'rate_recipe' recipe.id %}">Rate this recipe</a>
+    {% if user_rating %}
+      <p>Your Rating: {{ user_rating.stars }} stars</p>
+    {% else %}
+      <p>You haven't rated this recipe yet.</p>
+      <a href="{% url 'rate_recipe' recipe.id %}">Rate this recipe</a>
+    {% endif %}
   {% endif %}
-
   <p>Average Rating: {{ recipe.average_rating }} stars</p>
 {% endblock %}

@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    <h1>Welcome to Your Project!</h1>
-    <p>This is the home page.</p>
-</div>
+    <h1>Dish Dash!</h1>
+    <h2>Trending Recipes</h2>
+    <ul>
+    {% for recipe in trending_recipes %}
+        <li>
+            <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
+            by {{ recipe.user.username }}
+        </li>
+    {% endfor %}
+    </ul>
 {% endblock %}

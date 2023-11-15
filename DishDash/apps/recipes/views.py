@@ -17,13 +17,20 @@ def recipe_list(request):
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'recipe_detail.html', {'recipe': recipe})
+    user_rating = Rating.objects.filter(user=request.user, recipe=recipe).first()
+    recipe.increase_views()
+    return render(request, 'recipe_detail.html', {'recipe': recipe, 'user_rating': user_rating})
+
+def create_recipe(request):
+    new_recipe = Recipe.objects.create(user=request.user, title=title, description=description)
+    return render(request, 'recipe_detail.html', {'recipe': new_recipe})
 
 def home(request):
-    return render(request, 'home.html')
+    trending_recipes = Recipe.objects.order_by('-views')[:5].select_related('user')
+    return render(request, 'home.html', {'trending_recipes': trending_recipes})
 
 def profile(request):
-    user = request.user  # Assuming you have a one-to-one relationship
+    user = request.user 
 
     context = {
         'user': request.user,
