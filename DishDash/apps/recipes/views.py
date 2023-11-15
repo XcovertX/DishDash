@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Recipe, UserProfile
+from .models import Recipe, UserProfile, Rating
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -7,15 +7,16 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import MyLoginForm, UserProfileForm, UserForm
+from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
     return render(request, 'recipe_list.html', {'recipes': recipes})
 
-def recipe_detail(request, pk):
-    recipe = get_object_or_404(Recipe, pk=pk)
+def recipe_detail(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     return render(request, 'recipe_detail.html', {'recipe': recipe})
 
 def home(request):
@@ -67,3 +68,23 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('login')
+
+@login_required
+def rate_recipe(request, recipe_id):
+    recipe = Recipe.objects.get(pk=recipe_id)
+    user_rating, created = Rating.objects.get_or_create(user=request.user, recipe=recipe)
+
+    if request.method == 'POST':
+        form = RatingForm(request.POST, instance=user_rating)
+        if form.is_valid():
+            form.save()
+            return redirect('recipe_detail', recipe_id=recipe_id)
+    else:
+        form = RatingForm(instance=user_rating)
+
+    context = {
+        'recipe': recipe,
+        'form': form,
+    }
+
+    return render(request, 'rate_recipe.html', context)

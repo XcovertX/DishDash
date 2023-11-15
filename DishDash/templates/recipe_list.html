@@ -3,6 +3,6 @@
 {% block content %}
   <h2>Recipe List</h2>
   {% for recipe in recipes %}
-    <h3><a href="{% url 'recipe_detail' pk=recipe.pk %}">{{ recipe.title }}</a></h3>
+    <h3><a href="{% url 'recipe_detail' recipe_id=recipe.recipe_id %}">{{ recipe.title }}</a></h3>
   {% endfor %}
 {% endblock %}

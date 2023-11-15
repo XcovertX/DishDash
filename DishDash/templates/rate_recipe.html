@@ -1,0 +1,11 @@
+<!-- rate_recipe.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Rate {{ recipe.title }}</h2>
+  <form method="post" action="{% url 'rate_recipe' recipe.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Rate</button>
+  </form>
+{% endblock %}

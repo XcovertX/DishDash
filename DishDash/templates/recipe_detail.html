@@ -16,4 +16,10 @@
       <li>{{ step }}</li>
     {% endfor %}
   </ol>
+  {% if user.is_authenticated %}
+    <p>Your Rating: {{ user_rating.stars }} stars</p>
+    <a href="{% url 'rate_recipe' recipe.id %}">Rate this recipe</a>
+  {% endif %}
+
+  <p>Average Rating: {{ recipe.average_rating }} stars</p>
 {% endblock %}
