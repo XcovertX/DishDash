@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import UserProfile, Rating
+from .models import UserProfile, Rating, Recipe
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
@@ -28,4 +28,9 @@ class RatingForm(forms.ModelForm):
 
 class MyLoginForm(AuthenticationForm):
     pass
+
+class RecipeForm(forms.ModelForm):
+    class Meta:
+        model = Recipe
+        fields = ['title', 'description', 'ingredients', 'instructions', 'image']
 

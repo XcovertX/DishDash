@@ -7,7 +7,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm
+from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm, RecipeForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
@@ -21,9 +21,22 @@ def recipe_detail(request, recipe_id):
     recipe.increase_views()
     return render(request, 'recipe_detail.html', {'recipe': recipe, 'user_rating': user_rating})
 
+@login_required
 def create_recipe(request):
-    new_recipe = Recipe.objects.create(user=request.user, title=title, description=description)
-    return render(request, 'recipe_detail.html', {'recipe': new_recipe})
+    if request.method == 'POST':
+        form = RecipeForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_recipe = form.save(commit=False)
+            new_recipe.user = request.user
+            new_recipe.save()
+            # return redirect('profile')
+            return redirect('recipe_detail', recipe_id=new_recipe.id)
+        else: 
+            print(form.errors)
+    else:
+        form = RecipeForm()
+
+    return render(request, 'create_recipe.html', {'form': form})
 
 def home(request):
     trending_recipes = Recipe.objects.order_by('-views')[:5].select_related('user')

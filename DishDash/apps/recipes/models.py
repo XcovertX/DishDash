@@ -5,11 +5,13 @@ from django.db.models import Avg
 class Recipe(models.Model):
     id           = models.AutoField(primary_key=True)
     title        = models.CharField(max_length=255)
+    description  = models.TextField()
     ingredients  = models.JSONField()
     instructions = models.JSONField()
     created_at   = models.DateTimeField(auto_now_add=True)
     views        = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user         = models.ForeignKey(User, on_delete=models.CASCADE)
+    image        = models.ImageField(upload_to='recipe_images/')
     @property
     def average_rating(self):
         return self.rating_set.aggregate(Avg('stars'))['stars__avg']
