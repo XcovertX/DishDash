@@ -28,6 +28,16 @@ class Rating(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     stars  = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])
 
+class Comment(models.Model):
+    recipe         = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user           = models.ForeignKey(User, on_delete=models.CASCADE)
+    text           = models.TextField()
+    parent_comment = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
+    created_at     = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.text[:50]}"
+
 class UserProfile(models.Model):
     user   = models.OneToOneField(User, on_delete=models.CASCADE)
     bio    = models.TextField(blank=True)

@@ -1,0 +1,27 @@
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/recipe_detail.css' %}">
+</head>
+<div class="comment-card">
+  <!-- Reply button for authenticated users -->
+  {% if user.is_authenticated %}
+    <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+  {% endif %}
+
+  <div class="comment">
+    <p class="comment-info">{{ comment.user.username }} said:</p>
+    <p class="comment-text">{{ comment.text }}</p>
+
+    <!-- Recursive rendering of replies -->
+    {% if comment.replies.all %}
+      <div class="replies">
+        {% for reply in comment.replies.all %}
+          <div class="comment">
+            {% include 'comment_card.html' %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

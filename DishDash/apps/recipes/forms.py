@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import UserProfile, Rating, Recipe
+from .models import UserProfile, Rating, Recipe, Comment
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField()
@@ -33,4 +33,19 @@ class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
         fields = ['title', 'description', 'ingredients', 'instructions', 'image']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'comment-text-field',
+                'style': 'height: 50px; width: auto',
+                'placeholder': 'comment'
+            })
+        }
+        labels = {
+            'text': ''
+        }
 

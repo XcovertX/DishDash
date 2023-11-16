@@ -1,0 +1,24 @@
+{% for comment in comments %}
+  <div class="comment">
+    <div class="comment-header">
+      <p class="comment-header-username">@{{ comment.user.username }}:</p>
+      <p class="comment-info">{{ comment.created_at }}</p>
+    </div>
+
+    <!-- Reply button for authenticated users -->
+    {% if user.is_authenticated %}
+      <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+    {% endif %}
+    
+    <!-- Show/hide replies button -->
+    {% if comment.replies.all %}
+      <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+    {% endif %}
+
+    <!-- Container for replies -->
+    <div class="replies-container" data-comment-id="{{ comment.id }}" style="display: none;">
+      {% include 'partials/comment_tree.html' with comments=comment.replies.all %}
+    </div>
+  </div>
+{% endfor %}
+

@@ -1,31 +1,135 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>{{ recipe.title }}</h2>
-  {% if recipe.image %}
-    <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}">
-  {% endif %}
-  <p>Views: {{ recipe.views }}</p>
-  <h3>Ingredients:</h3>
-  <ul>
-    {% for ingredient in recipe.ingredients %}
-      <li>{{ ingredient }}</li>
-    {% endfor %}
-  </ul>
-
-  <h3>Instructions:</h3>
-  <ol>
-    {% for step in recipe.instructions %}
-      <li>{{ step }}</li>
-    {% endfor %}
-  </ol>
-  {% if user.is_authenticated %}
-    {% if user_rating %}
-      <p>Your Rating: {{ user_rating.stars }} stars</p>
-    {% else %}
-      <p>You haven't rated this recipe yet.</p>
-      <a href="{% url 'rate_recipe' recipe.id %}">Rate this recipe</a>
+  <div class="recipe-detail">
+    <h2 class="recipe-title">{{ recipe.title }}</h2>
+    {% if recipe.image %}
+      <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
     {% endif %}
-  {% endif %}
-  <p>Average Rating: {{ recipe.average_rating }} stars</p>
+    <div class="recipe-stats">
+      <p class="recipe-views">Views: {{ recipe.views }}</p>
+      {% if user.is_authenticated %}
+        {% if user_rating %}
+          <p class="user-rating">Your Rating: {{ user_rating.stars }} stars</p>
+        {% else %}
+          <p class="user-rating">You haven't rated this recipe yet.</p>
+          <a href="{% url 'rate_recipe' recipe.id %}" class="rate-link">Rate this recipe</a>
+        {% endif %}
+      {% endif %}
+      <p class="average-rating">Average Rating: {{ recipe.average_rating }} stars</p>
+    </div>
+    <p class="recipe-description">{{ recipe.description }}</p>
+    
+
+    <div class="recipe-section">
+      <h3 class="recipe-heading">Ingredients:</h3>
+      <ul class="recipe-list">
+        {% for ingredient in recipe.ingredients %}
+          <li class="recipe-item">{{ ingredient }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="recipe-section">
+      <h3 class="recipe-heading">Instructions:</h3>
+      <ol class="recipe-list">
+        {% for step in recipe.instructions %}
+          <li class="recipe-item">{{ step }}</li>
+        {% endfor %}
+      </ol>
+    </div>
+
+    <div class="comments-section">
+      <div class="comment-form">
+        <h3 class="comment-heading">Leave a Comment</h3>
+        <form method="post" action="{% url 'recipe_detail' recipe_id=recipe.id %}">
+          {% csrf_token %}
+          {{ comment_form.as_p }}
+          <input type="hidden" name="parent_comment" value="{{ parent_comment_id }}">
+          <button type="submit" class="comment-submit">Submit</button>
+        </form>
+      </div>
+      <h2>{{ comments.count }} Comments</h2>
+      {% for comment in comments %}
+        <div class="comment">
+          <div class="comment-header">
+            <p class="comment-header-username">@{{ comment.user.username }}:</p>
+            <p class="comment-info">{{ comment.created_at }}</p>
+          </div>
+          
+          <p class="comment-text">{{ comment.text }}</p>
+      
+          <!-- Reply button for authenticated users -->
+          {% if user.is_authenticated %}
+            <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+          {% endif %}
+      
+          <!-- Show/hide replies button -->
+          {% if comment.replies.all %}
+            <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+          {% endif %}
+      
+          <!-- Container for replies -->
+          <div class="replies-container" data-comment-id="{{ comment.id }}" style="display: none;">
+            {% include 'partials/comment_tree.html' with comments=comment.replies.all %}
+          </div>
+        </div>
+            <!-- Reply form (hidden by default) -->
+        {% if user.is_authenticated %}
+          <div class="reply-form-container" style="display: none;">
+            <h3>Reply to Comment</h3>
+            <form method="post" action="{% url 'reply_comment' recipe_id=recipe.id %}">
+              {% csrf_token %}
+              {{ comment_form.as_p }}
+              <input type="hidden" name="parent_comment" id="parent-comment-id" value="">
+              <button type="submit" class="comment-submit">Submit Reply</button>
+            </form>
+          </div>
+        {% endif %}
+      {% endfor %}
+    
+
+    
+    <script>
+      // JavaScript to handle reply button click and toggle replies
+      const replyButtons = document.querySelectorAll('.reply-button');
+      const toggleButtons = document.querySelectorAll('.toggle-replies');
+      const repliesContainers = document.querySelectorAll('.replies-container');
+      const replyFormContainer = document.querySelector('.reply-form-container');
+      const parentCommentIdInput = document.getElementById('parent-comment-id');
+    
+      replyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const commentId = button.getAttribute('data-comment-id');
+          // Set the parent comment ID in the hidden input field
+          parentCommentIdInput.value = commentId;
+          // Show the reply form container
+          replyFormContainer.style.display = 'block';
+        });
+      });
+    
+      toggleButtons.forEach(button => {
+        if(button.innerHTML == 1) {
+            button.innerHTML = button.innerHTML.concat(' Reply')
+          } else {
+            button.innerHTML = button.innerHTML.concat(' Replies')
+          }
+        button.addEventListener('click', () => {
+
+          const commentId = button.getAttribute('data-comment-id');
+          const container = document.querySelector(`.replies-container[data-comment-id="${commentId}"]`);
+          
+          // Check if the container exists before trying to modify its style
+          if (container) {
+            // Toggle the visibility of replies
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+    </script>
+    </div>
+
+
+  </div>
 {% endblock %}
+

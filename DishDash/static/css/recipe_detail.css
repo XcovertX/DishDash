@@ -1,0 +1,137 @@
+/* static/css/recipe_detail.css */
+
+.recipe-detail {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Style for the recipe title */
+.recipe-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style for the recipe image */
+.recipe-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Style for views and rating */
+.recipe-stats {
+   display: flex;
+   flex-direction: row;
+   align-items:center;
+   justify-content: space-between;
+   background-color: crimson;
+}
+
+/* Style for the recipe description */
+.recipe-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    background-color: blueviolet;
+}
+
+/* Style for the ingredients and instructions */
+.recipe-section {
+    margin-bottom: 20px;
+}
+
+/* Style for the comments section */
+.comments-section {
+    margin-top: 30px;
+    padding-inline: 15px;
+    padding-block: 5px;
+    background-color: #4CAF50;
+}
+
+/* Style for each comment */
+.comment {
+    padding-left: 30px;
+    background-color: brown;
+}
+
+/* Style for views and rating */
+.comment-header {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content: start;
+    gap: 1%;
+    font-size: 12px;
+    background-color: aqua;
+    height:20px
+ }
+
+ .comment-header-username {
+    color:black
+ }
+
+/* Style for the comment author and timestamp */
+.comment-info { 
+    color: #777;
+}
+
+/* Style for view count in comments */
+.toggle-replies {
+    font-style: italic;
+    color: #777;
+    background-color: transparent;
+    border: transparent;
+}
+
+.toggle-replies:hover {
+    color: white;
+    cursor:pointer;
+}
+
+/* Style for view count in comments */
+.reply-button {
+    font-style: italic;
+    color: #777;
+    background-color: transparent;
+    border: transparent;
+}
+
+.reply-button:hover {
+    color: white;
+    cursor:pointer;
+}
+
+/* Style for the comment text */
+.comment-text {
+    font-size: 14px;
+    margin: 0px;
+    background-color: #45a049;
+    
+}
+
+/* Style for the comment textfield */
+.comment-text-field {
+    min-width:100%;
+}
+
+/* Style for the comment form */
+.comment-form {
+    margin-top: 20px;
+    padding-inline: 15px;
+    padding-block: 5px;
+    background-color: aqua;
+}
+
+/* Style for the submit button in the comment form */
+.comment-submit {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-submit:hover {
+    background-color: #45a049;
+}

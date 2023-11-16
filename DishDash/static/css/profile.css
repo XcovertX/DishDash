@@ -30,38 +30,40 @@
   #edit-profile-btn:hover {
     background-color: #27ae60;
   }
-  
-  /* Recipe Section */
-  .recipe-section {
-    margin-top: 20px;
-  }
-  
-  /* Individual Recipe Card */
-  .recipe-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  
-  .recipe-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .recipe-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
 
-  .recipe-info {
-    flex: 1;
-  } 
+    /* Recipe Section */
+    .recipe-section {
+        margin-top: 20px;
+      }
+      
+      /* Individual Recipe Card */
+      .recipe-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+      }
+      
+      .recipe-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      
+      .recipe-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+    
+      .recipe-info {
+        flex: 1;
+      } 
+  
+
 
   

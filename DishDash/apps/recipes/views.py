@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Recipe, UserProfile, Rating
+from .models import Recipe, UserProfile, Rating, Comment
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -7,7 +7,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm, RecipeForm
+from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm, RecipeForm, CommentForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
@@ -17,9 +17,45 @@ def recipe_list(request):
 
 def recipe_detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+    comments = Comment.objects.filter(recipe=recipe, parent_comment=None).prefetch_related('replies')
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                parent_comment_id = request.POST.get('parent_comment')
+                Comment.objects.create(user=request.user, text=form.cleaned_data['text'],
+                                    recipe=recipe, parent_comment_id=parent_comment_id)
+    else:
+        form = CommentForm()
     user_rating = Rating.objects.filter(user=request.user, recipe=recipe).first()
     recipe.increase_views()
-    return render(request, 'recipe_detail.html', {'recipe': recipe, 'user_rating': user_rating})
+    context = {
+        'recipe': recipe, 
+        'user_rating': user_rating,
+        'comment_form': form,
+        'comments': comments
+    }
+    return render(request, 'recipe_detail.html', context)
+
+def render_comment_form(request, recipe_id, parent_comment_id=None):
+    recipe = Recipe.objects.get(pk=recipe_id)
+    parent_comment = Comment.objects.get(pk=parent_comment_id) if parent_comment_id else None
+    form = CommentForm()
+    return render(request, 'comment_form.html', {'recipe': recipe, 'parent_comment': parent_comment, 'comment_form': form})
+
+def reply_comment(request, recipe_id):
+    recipe = Recipe.objects.get(pk=recipe_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            parent_comment_id = request.POST.get('parent_comment')
+            parent_comment = Comment.objects.get(pk=parent_comment_id) if parent_comment_id else None
+            Comment.objects.create(user=request.user, text=form.cleaned_data['text'],
+                                   recipe=recipe, parent_comment=parent_comment)
+
+    return redirect('recipe_detail', recipe_id=recipe.id)
 
 @login_required
 def create_recipe(request):
@@ -29,7 +65,6 @@ def create_recipe(request):
             new_recipe        = form.save(commit=False)
             new_recipe.user   = request.user
             new_recipe.save()
-            # return redirect('profile')
             return redirect('recipe_detail', recipe_id=new_recipe.id)
         else: 
             print(form.errors)
@@ -44,24 +79,6 @@ def home(request):
 
 def profile(request):
     user_recipes = Recipe.objects.filter(user=request.user)
-    # recipe_data  = []
-    # for recipe in user_recipes:
-    #     # Calculate total views
-    #     total_views = recipe.views
-
-    #     # Calculate average rating
-    #     ratings = Rating.objects.filter(recipe=recipe)
-    #     if ratings.exists():
-    #         average_rating = sum([rating.stars for rating in ratings]) / len(ratings)
-    #     else:
-    #         average_rating = 0
-
-    #     recipe_data.append({
-    #         'recipe': recipe,
-    #         'total_views': total_views,
-    #         'average_rating': average_rating,
-    #     })
-
     context = {
         'user': request.user,
         'user_recipes': user_recipes,
