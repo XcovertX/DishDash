@@ -26,8 +26,8 @@ def create_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
-            new_recipe = form.save(commit=False)
-            new_recipe.user = request.user
+            new_recipe        = form.save(commit=False)
+            new_recipe.user   = request.user
             new_recipe.save()
             # return redirect('profile')
             return redirect('recipe_detail', recipe_id=new_recipe.id)
@@ -43,23 +43,51 @@ def home(request):
     return render(request, 'home.html', {'trending_recipes': trending_recipes})
 
 def profile(request):
-    user = request.user 
+    user_recipes = Recipe.objects.filter(user=request.user)
+    # recipe_data  = []
+    # for recipe in user_recipes:
+    #     # Calculate total views
+    #     total_views = recipe.views
+
+    #     # Calculate average rating
+    #     ratings = Rating.objects.filter(recipe=recipe)
+    #     if ratings.exists():
+    #         average_rating = sum([rating.stars for rating in ratings]) / len(ratings)
+    #     else:
+    #         average_rating = 0
+
+    #     recipe_data.append({
+    #         'recipe': recipe,
+    #         'total_views': total_views,
+    #         'average_rating': average_rating,
+    #     })
 
     context = {
         'user': request.user,
+        'user_recipes': user_recipes,
     }
+    
+    return render(request, 'profile.html', context)
+
+def edit_profile(request):
+    user = request.user 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=user)
-        profile_form = UserProfileForm(request.POST, request.FILES, instance=user)
+        user_form     = UserForm(request.POST, instance=user)
+        profile_form  = UserProfileForm(request.POST, request.FILES, instance=user)
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
     else:
-        user_form = UserForm(instance=user)
+        user_form    = UserForm(instance=user)
         profile_form = UserProfileForm(instance=user)
-    
-    return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+    context = {
+        'user': user,
+        'user_form': user_form, 
+        'profile_form': profile_form
+    }
+    return render(request, 'edit_profile.html', context)
 
 def signup(request):
     if request.method == 'POST':

@@ -1,0 +1,16 @@
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+</head>
+<div class="recipe-card">
+    <div class="recipe-info">
+        <h3>{{ recipe.title }}</h3>
+        <p>Views: {{ recipe.views }}</p>
+        <p>Average Rating: {{ recipe.average_rating }}</p>
+    </div>
+    <div class="recipe-actions">
+        <!-- Add any additional actions or buttons here -->
+        <a href="{% url 'recipe_detail' recipe_id=recipe.id %}">View Recipe</a>
+    </div>
+</div>

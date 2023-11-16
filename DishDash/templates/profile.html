@@ -1,16 +1,59 @@
 <!-- profile.html -->
 
 {% extends 'base.html' %}
+{% block extrastyles %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h2>Welcome to your profile, {{ user.username }}!</h2>
-    <p>First Name: {{ user.first_name }}</p>
-    <p>Last Name: {{ user.last_name }}</p>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    <button type="submit">Save Changes</button>
-  </form>
 
-{% endblock %}
+  <div id="profile-container">
+    <div id="profile-header">
+      <h1>Welcome to your profile, {{ user.username }}!</h1>
+    </div>
+    <div id="user-details">
+      <h2>User Details</h2>
+      <!-- Add your user details here -->
+      <p>Username: {{ user.username }}</p>
+      <p>Email: {{ user.email }}</p>
+      <!-- Add more details as needed -->
+    </div>
+  
+    <!-- <button id="edit-profile-btn">Edit Profile</button> -->
+    <a id="edit-profile-btn" href="{% url 'edit_profile' %}">Edit Profile</a>
+    <div class="recipe-section">
+      <h2>Recipes</h2>
+  
+      <!-- Recipe Cards -->
+      {% if user_recipes %}
+        <div class="recipe-list">
+          {% for recipe in user_recipes %}
+              {% include 'recipe_card.html' with recipe=recipe %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No recipes found.</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %} 
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+
+
+
+</body>
+</html>

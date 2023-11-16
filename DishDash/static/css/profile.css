@@ -1,0 +1,67 @@
+/* Profile Container */
+#profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Profile Header */
+  #profile-header {
+    background-color: #3498db;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* User Details */
+  #user-details {
+    margin: 20px 0;
+  }
+  
+  /* Edit Profile Button */
+  #edit-profile-btn {
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #edit-profile-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  /* Recipe Section */
+  .recipe-section {
+    margin-top: 20px;
+  }
+  
+  /* Individual Recipe Card */
+  .recipe-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .recipe-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .recipe-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .recipe-info {
+    flex: 1;
+  } 
+
+  
