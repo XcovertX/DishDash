@@ -10,6 +10,9 @@ from django.contrib import messages
 from .forms import MyLoginForm, UserProfileForm, UserForm, RatingForm, RecipeForm, CommentForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
@@ -41,7 +44,10 @@ def recipe_detail(request, recipe_id):
 def render_comment_form(request, recipe_id, parent_comment_id=None):
     recipe = Recipe.objects.get(pk=recipe_id)
     parent_comment = Comment.objects.get(pk=parent_comment_id) if parent_comment_id else None
-    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+    else:
+        form = CommentForm()
     return render(request, 'comment_form.html', {'recipe': recipe, 'parent_comment': parent_comment, 'comment_form': form})
 
 def reply_comment(request, recipe_id):
@@ -54,8 +60,31 @@ def reply_comment(request, recipe_id):
             parent_comment = Comment.objects.get(pk=parent_comment_id) if parent_comment_id else None
             Comment.objects.create(user=request.user, text=form.cleaned_data['text'],
                                    recipe=recipe, parent_comment=parent_comment)
-
     return redirect('recipe_detail', recipe_id=recipe.id)
+
+
+@require_POST
+@csrf_exempt
+def like_comment(request, comment_id):
+
+    if request.method == 'POST':
+        comment = Comment.objects.get(pk=comment_id)
+        comment.likes += 1
+        comment.save()
+        return JsonResponse({'likes': comment.likes})
+    else:
+        return JsonResponse({'error': 'Invalid request'})
+    
+@require_POST
+@csrf_exempt
+def dislike_comment(request, comment_id):
+    if request.method == 'POST':
+        comment = Comment.objects.get(pk=comment_id)
+        comment.dislikes += 1
+        comment.save()
+        return JsonResponse({'dislikes': comment.dislikes})
+    else:
+        return JsonResponse({'error': 'Invalid request'})
 
 @login_required
 def create_recipe(request):

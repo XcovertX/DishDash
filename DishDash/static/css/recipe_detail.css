@@ -23,8 +23,7 @@
 .recipe-stats {
    display: flex;
    flex-direction: row;
-   align-items:center;
-   justify-content: space-between;
+   text-align: center;
    background-color: crimson;
 }
 
@@ -45,13 +44,16 @@
     margin-top: 30px;
     padding-inline: 15px;
     padding-block: 5px;
-    background-color: #4CAF50;
+    background-color: #CCC;
 }
 
 /* Style for each comment */
 .comment {
     padding-left: 30px;
-    background-color: brown;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #f4f4f4;
 }
 
 /* Style for views and rating */
@@ -62,7 +64,6 @@
     justify-content: start;
     gap: 1%;
     font-size: 12px;
-    background-color: aqua;
     height:20px
  }
 
@@ -105,7 +106,7 @@
 .comment-text {
     font-size: 14px;
     margin: 0px;
-    background-color: #45a049;
+    background-color: #f2f2f2;
     
 }
 
@@ -135,3 +136,35 @@
 .comment-submit:hover {
     background-color: #45a049;
 }
+
+
+.like-button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.like-button img {
+    width: 20px; 
+    height: 20px;
+}
+
+
+.dislike-button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.dislike-button img {
+    width: 20px; 
+    height: 20px;
+}
+
+.like-button:hover {
+    background-color: #45a049;
+    cursor:pointer;
+}
+.dislike-button:hover {
+    background-color: brown;
+    cursor:pointer;
+}
+

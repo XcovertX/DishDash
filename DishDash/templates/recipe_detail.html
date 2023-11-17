@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
   <div class="recipe-detail">
     <h2 class="recipe-title">{{ recipe.title }}</h2>
@@ -61,7 +61,15 @@
       
           <!-- Reply button for authenticated users -->
           {% if user.is_authenticated %}
-            <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+            <button class="reply-button"   data-comment-id="{{ comment.id }}">Reply</button>
+            <button class="like-button"    data-comment-id="{{ comment.id }}">
+              <img src="{% static 'icons/thumbs-up.png' %}" alt="like">
+            </button>
+            <span   class="like-count"     data-comment-id="{{ comment.id }}">{{ comment.likes }}</span>
+            <button class="dislike-button" data-comment-id="{{ comment.id }}">
+              <img src="{% static 'icons/thumbs-down.png' %}" alt="dislike">
+            </button>
+            <span   class="dislike-count"  data-comment-id="{{ comment.id }}">{{ comment.dislikes }}</span>
           {% endif %}
       
           <!-- Show/hide replies button -->
@@ -97,6 +105,8 @@
       const repliesContainers = document.querySelectorAll('.replies-container');
       const replyFormContainer = document.querySelector('.reply-form-container');
       const parentCommentIdInput = document.getElementById('parent-comment-id');
+      const likeButtons = document.querySelectorAll('.like-button');
+      const dislikeButtons = document.querySelectorAll('.dislike-button');
     
       replyButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -125,6 +135,62 @@
             container.style.display = container.style.display === 'none' ? 'block' : 'none';
           }
         });
+      });
+
+      // Assume you have like and dislike buttons with classes 'like-button' and 'dislike-button'
+      document.addEventListener('DOMContentLoaded', function () {
+        const likeButtons = document.querySelectorAll('.like-button');
+        const dislikeButtons = document.querySelectorAll('.dislike-button');
+
+        likeButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            handleLike(this.dataset.commentId);
+          });
+        });
+
+        dislikeButtons.forEach(button => {
+          button.addEventListener('click', function () {
+            handleDislike(this.dataset.commentId);
+          });
+        });
+
+        function handleLike(commentId) {
+          fetch(`/like_comment/${commentId}/`, { 
+            method: 'POST'
+          })
+            .then(response => response.json())
+            .then(data => {
+              updateLikeCount(commentId, data.likes);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function handleDislike(commentId) {
+          fetch(`/dislike_comment/${commentId}/`, { 
+            method: 'POST'
+          })
+            .then(response => response.json())
+            .then(data => {
+              updateDislikeCount(commentId, data.dislikes);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateLikeCount(commentId, likes) {
+          const likeCountElement = document.querySelector(`.like-count[data-comment-id="${commentId}"]`);
+          if (likeCountElement) {
+            likeCountElement.textContent = likes;
+          }
+        }
+
+        function updateDislikeCount(commentId, dislikes) {
+          const dislikeCountElement = document.querySelector(`.dislike-count[data-comment-id="${commentId}"]`);
+          console.log('asadasd')
+          if (dislikeCountElement) {
+            console.log('asadasd')
+            dislikeCountElement.textContent = dislikes;
+          }
+        }
       });
     </script>
     </div>
