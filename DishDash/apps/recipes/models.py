@@ -32,8 +32,8 @@ class Comment(models.Model):
     recipe         = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     user           = models.ForeignKey(User, on_delete=models.CASCADE)
     text           = models.TextField()
-    likes          = models.IntegerField(default=0)
-    dislikes       = models.IntegerField(default=0)
+    likes          = models.ManyToManyField(User, related_name='comment_likes', blank=True)
+    dislikes       = models.ManyToManyField(User, related_name='comment_dislikes', blank=True)
     parent_comment = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     created_at     = models.DateTimeField(auto_now_add=True)
 

@@ -14,11 +14,11 @@
       <button class="like-button"    data-comment-id="{{ comment.id }}">
         <img src="{% static 'icons/thumbs-up.png' %}" alt="like">
       </button>
-      <span   class="like-count"     data-comment-id="{{ comment.id }}">{{ comment.likes }}</span>
+      <span   class="like-count"     data-comment-id="{{ comment.id }}">{{ comment.likes.count }}</span>
       <button class="dislike-button" data-comment-id="{{ comment.id }}">
         <img src="{% static 'icons/thumbs-down.png' %}" alt="dislike">
       </button>
-      <span   class="dislike-count"  data-comment-id="{{ comment.id }}">{{ comment.dislikes }}</span>
+      <span   class="dislike-count"  data-comment-id="{{ comment.id }}">{{ comment.dislikes.count }}</span>
     {% endif %}
 
     

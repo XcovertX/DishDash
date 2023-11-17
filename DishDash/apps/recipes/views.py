@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers import serialize
 
 def recipe_list(request):
     recipes = Recipe.objects.all()
@@ -44,10 +45,7 @@ def recipe_detail(request, recipe_id):
 def render_comment_form(request, recipe_id, parent_comment_id=None):
     recipe = Recipe.objects.get(pk=recipe_id)
     parent_comment = Comment.objects.get(pk=parent_comment_id) if parent_comment_id else None
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-    else:
-        form = CommentForm()
+    form = CommentForm()
     return render(request, 'comment_form.html', {'recipe': recipe, 'parent_comment': parent_comment, 'comment_form': form})
 
 def reply_comment(request, recipe_id):
@@ -66,12 +64,23 @@ def reply_comment(request, recipe_id):
 @require_POST
 @csrf_exempt
 def like_comment(request, comment_id):
-
     if request.method == 'POST':
-        comment = Comment.objects.get(pk=comment_id)
-        comment.likes += 1
-        comment.save()
-        return JsonResponse({'likes': comment.likes})
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(pk=comment_id)
+            if user not in comment.likes.all():
+                comment.likes.add(user)
+                comment.dislikes.remove(user)  # Remove dislike if user had disliked before
+                print(comment.likes.all().count(), comment.dislikes.all().count())
+                return JsonResponse({
+                    'status': 'liked',
+                    'likes': comment.likes.all().count(),
+                    'dislikes': comment.dislikes.all().count()
+                    })
+            else:
+                return JsonResponse({'status': 'already_liked'})
+
+        return JsonResponse({'status': 'not_authenticated'})
     else:
         return JsonResponse({'error': 'Invalid request'})
     
@@ -79,10 +88,21 @@ def like_comment(request, comment_id):
 @csrf_exempt
 def dislike_comment(request, comment_id):
     if request.method == 'POST':
-        comment = Comment.objects.get(pk=comment_id)
-        comment.dislikes += 1
-        comment.save()
-        return JsonResponse({'dislikes': comment.dislikes})
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(pk=comment_id)
+            if user not in comment.dislikes.all():
+                comment.dislikes.add(user)
+                comment.likes.remove(user)  # Remove dislike if user had disliked before
+                return JsonResponse({
+                    'status': 'disliked',
+                    'likes': comment.likes.all().count(),
+                    'dislikes': comment.dislikes.all().count()
+                    })
+            else:
+                return JsonResponse({'status': 'already_disliked'})
+
+        return JsonResponse({'status': 'not_authenticated'})
     else:
         return JsonResponse({'error': 'Invalid request'})
 
