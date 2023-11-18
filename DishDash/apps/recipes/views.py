@@ -60,11 +60,21 @@ def reply_comment(request, recipe_id):
                                    recipe=recipe, parent_comment=parent_comment)
     return redirect('recipe_detail', recipe_id=recipe.id)
 
-
-@require_POST
 @csrf_exempt
 def like_comment(request, comment_id):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(pk=comment_id)
+            if user in comment.likes.all():
+                return JsonResponse({
+                    'status': 'liked'
+                    })
+            else:
+                return JsonResponse({'status': 'not_liked'})
+        else:
+            return JsonResponse({'status': 'not_authenticated'})
+    elif request.method == 'POST':
         user = request.user
         if user.is_authenticated:
             comment = Comment.objects.get(pk=comment_id)
@@ -84,10 +94,21 @@ def like_comment(request, comment_id):
     else:
         return JsonResponse({'error': 'Invalid request'})
     
-@require_POST
 @csrf_exempt
 def dislike_comment(request, comment_id):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        user = request.user
+        if user.is_authenticated:
+            comment = Comment.objects.get(pk=comment_id)
+            if user in comment.dislikes.all():
+                return JsonResponse({
+                    'status': 'disliked'
+                    })
+            else:
+                return JsonResponse({'status': 'not_disliked'})
+        else:
+            return JsonResponse({'status': 'not_authenticated'})
+    elif request.method == 'POST':
         user = request.user
         if user.is_authenticated:
             comment = Comment.objects.get(pk=comment_id)

@@ -49,10 +49,19 @@
 
 /* Style for each comment */
 .comment {
-    padding-left: 30px;
+    padding: 10px;
     justify-content: center;
     align-items: center;
     margin-bottom: 15px;
+    background-color: #f4f4f4;
+}
+
+/* Style for each comment */
+.reply-comment {
+    margin-top: 10px;
+    margin-left: 30px;
+    justify-content: center;
+    align-items: center;
     background-color: #f4f4f4;
 }
 
@@ -106,8 +115,7 @@
 .comment-text {
     font-size: 14px;
     margin: 0px;
-    background-color: #f2f2f2;
-    
+    padding-block: 2px;
 }
 
 /* Style for the comment textfield */
@@ -137,34 +145,60 @@
     background-color: #45a049;
 }
 
+.comment-response {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 15px;
+}
+
+.like-response {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.dislike-response {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
 
 .like-button {
-    background-color: transparent;
-    border: transparent;
+   border: 0;
 }
-
-.like-button img {
-    width: 20px; 
-    height: 20px;
-}
-
 
 .dislike-button {
-    background-color: transparent;
-    border: transparent;
+    border: 0;
 }
 
-.dislike-button img {
+.like-svg {
     width: 20px; 
     height: 20px;
 }
 
-.like-button:hover {
-    background-color: #45a049;
-    cursor:pointer;
+.dislike-svg {
+    width: 20px; 
+    height: 20px;
 }
-.dislike-button:hover {
-    background-color: brown;
+
+.like-svg:hover {
     cursor:pointer;
+    fill: green;
+}
+
+.dislike-svg:hover {
+    cursor:pointer;
+    fill: red;
+}
+
+.like-path {
+    fill: currentColor;
+}
+
+.dislike-path {
+    fill: currentColor;
 }
 

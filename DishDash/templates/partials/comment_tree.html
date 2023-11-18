@@ -1,6 +1,6 @@
 {% load static %}
 {% for comment in comments %}
-  <div class="comment">
+  <div class="reply-comment">
     <div class="comment-header">
       <p class="comment-header-username">@{{ comment.user.username }}:</p>
       <p class="comment-info">{{ comment.created_at }}</p>
@@ -10,22 +10,32 @@
 
     <!-- Reply button for authenticated users -->
     {% if user.is_authenticated %}
-      <button class="reply-button"   data-comment-id="{{ comment.id }}">Reply</button>
-      <button class="like-button"    data-comment-id="{{ comment.id }}">
-        <img src="{% static 'icons/thumbs-up.png' %}" alt="like">
-      </button>
-      <span   class="like-count"     data-comment-id="{{ comment.id }}">{{ comment.likes.count }}</span>
-      <button class="dislike-button" data-comment-id="{{ comment.id }}">
-        <img src="{% static 'icons/thumbs-down.png' %}" alt="dislike">
-      </button>
-      <span   class="dislike-count"  data-comment-id="{{ comment.id }}">{{ comment.dislikes.count }}</span>
-    {% endif %}
-
-    
-    
-    <!-- Show/hide replies button -->
-    {% if comment.replies.all %}
-      <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+    <div class="comment-response">
+      <div class="like-response">
+        <button class="like-button" data-comment-id="{{ comment.id }}">
+          <svg class='like-svg' data-comment-id="{{ comment.id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512">
+            <g id="_01_align_center" data-name="01 align center">
+              <path class='like-path' data-comment-id="{{ comment.id }}" d="M15.021,7l.336-2.041a3.044,3.044,0,0,0-4.208-3.287A3.139,3.139,0,0,0,9.582,3.225L7.717,7H3a3,3,0,0,0-3,3v9a3,3,0,0,0,3,3H22.018L24,10.963,24.016,7ZM2,19V10A1,1,0,0,1,3,9H7V20H3A1,1,0,0,1,2,19Zm20-8.3L20.33,20H9V8.909l2.419-4.9A1.07,1.07,0,0,1,13.141,3.8a1.024,1.024,0,0,1,.233.84L12.655,9H22Z"/>
+            </g>
+          </svg>
+          <span class="like-count" data-comment-id="{{ comment.id }}">{{ comment.likes.count }}</span>
+        </button>
+      </div>
+      <div class="dislike-response">
+        <button class="dislike-button" data-comment-id="{{ comment.id }}">
+          <svg class="dislike-svg" data-comment-id="{{ comment.id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512">
+            <g id="_01_align_center" data-name="01 align center">
+              <path class='dislike-path' data-comment-id="{{ comment.id }}" d="M24,14.214,22,3H3A3,3,0,0,0,0,6v9a3,3,0,0,0,3,3H7.712l1.914,3.879a3.038,3.038,0,0,0,5.721-1.838L15.011,18H24ZM2,15V6A1,1,0,0,1,3,5H7V16H3A1,1,0,0,1,2,15Zm20,1H12.655l.719,4.365a1.024,1.024,0,0,1-.233.84,1.071,1.071,0,0,1-1.722-.212L9,16.091V5H20.33L22,14.3Z"/>
+            </g>
+          </svg>
+          <span class="dislike-count" data-comment-id="{{ comment.id }}">{{ comment.dislikes.count }}</span>
+        </button>
+      </div>
+      {% if comment.replies.all %}
+        <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+      {% endif %}
+      <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+    </div>
     {% endif %}
 
     <!-- Container for replies -->

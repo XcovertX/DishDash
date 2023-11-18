@@ -59,22 +59,33 @@
           
           <p class="comment-text">{{ comment.text }}</p>
       
-          <!-- Reply button for authenticated users -->
           {% if user.is_authenticated %}
-            <button class="reply-button"   data-comment-id="{{ comment.id }}">Reply</button>
-            <button class="like-button"    data-comment-id="{{ comment.id }}">
-              <img src="{% static 'icons/thumbs-up.png' %}" alt="like">
-            </button>
-            <span   class="like-count"     data-comment-id="{{ comment.id }}">{{ comment.likes.count }}</span>
-            <button class="dislike-button" data-comment-id="{{ comment.id }}">
-              <img src="{% static 'icons/thumbs-down.png' %}" alt="dislike">
-            </button>
-            <span   class="dislike-count"  data-comment-id="{{ comment.id }}">{{ comment.dislikes.count }}</span>
-          {% endif %}
-      
-          <!-- Show/hide replies button -->
-          {% if comment.replies.all %}
-            <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+            <div class="comment-response">
+              <div class="like-response">
+                <button class="like-button" data-comment-id="{{ comment.id }}">
+                  <svg class='like-svg' data-comment-id="{{ comment.id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512">
+                    <g id="_01_align_center" data-name="01 align center">
+                      <path class='like-path' data-comment-id="{{ comment.id }}" d="M15.021,7l.336-2.041a3.044,3.044,0,0,0-4.208-3.287A3.139,3.139,0,0,0,9.582,3.225L7.717,7H3a3,3,0,0,0-3,3v9a3,3,0,0,0,3,3H22.018L24,10.963,24.016,7ZM2,19V10A1,1,0,0,1,3,9H7V20H3A1,1,0,0,1,2,19Zm20-8.3L20.33,20H9V8.909l2.419-4.9A1.07,1.07,0,0,1,13.141,3.8a1.024,1.024,0,0,1,.233.84L12.655,9H22Z"/>
+                    </g>
+                  </svg>
+                  <span class="like-count" data-comment-id="{{ comment.id }}">{{ comment.likes.count }}</span>
+                </button>
+              </div>
+              <div class="dislike-response">
+                <button class="dislike-button" data-comment-id="{{ comment.id }}">
+                  <svg class="dislike-svg" data-comment-id="{{ comment.id }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="512" height="512">
+                    <g id="_01_align_center" data-name="01 align center">
+                      <path class='dislike-path' data-comment-id="{{ comment.id }}" d="M24,14.214,22,3H3A3,3,0,0,0,0,6v9a3,3,0,0,0,3,3H7.712l1.914,3.879a3.038,3.038,0,0,0,5.721-1.838L15.011,18H24ZM2,15V6A1,1,0,0,1,3,5H7V16H3A1,1,0,0,1,2,15Zm20,1H12.655l.719,4.365a1.024,1.024,0,0,1-.233.84,1.071,1.071,0,0,1-1.722-.212L9,16.091V5H20.33L22,14.3Z"/>
+                    </g>
+                  </svg>
+                  <span class="dislike-count" data-comment-id="{{ comment.id }}">{{ comment.dislikes.count }}</span>
+                </button>
+              </div>
+              {% if comment.replies.all %}
+                <button class="toggle-replies" data-comment-id="{{ comment.id }}">{{ comment.replies.count }} </button>
+              {% endif %}
+              <button class="reply-button" data-comment-id="{{ comment.id }}">Reply</button>
+            </div>
           {% endif %}
       
           <!-- Container for replies -->
@@ -100,20 +111,18 @@
     
     <script>
       // JavaScript to handle reply button click and toggle replies
-      const replyButtons = document.querySelectorAll('.reply-button');
-      const toggleButtons = document.querySelectorAll('.toggle-replies');
-      const repliesContainers = document.querySelectorAll('.replies-container');
-      const replyFormContainer = document.querySelector('.reply-form-container');
-      const parentCommentIdInput = document.getElementById('parent-comment-id');
-      const likeButtons = document.querySelectorAll('.like-button');
-      const dislikeButtons = document.querySelectorAll('.dislike-button');
+      const replyButtons          = document.querySelectorAll('.reply-button');
+      const toggleButtons         = document.querySelectorAll('.toggle-replies');
+      const repliesContainers     = document.querySelectorAll('.replies-container');
+      const replyFormContainer    = document.querySelector('.reply-form-container');
+      const parentCommentIdInput  = document.getElementById('parent-comment-id');
+      const likeButtons           = document.querySelectorAll('.like-button');
+      const dislikeButtons        = document.querySelectorAll('.dislike-button');
     
       replyButtons.forEach(button => {
         button.addEventListener('click', () => {
           const commentId = button.getAttribute('data-comment-id');
-          // Set the parent comment ID in the hidden input field
           parentCommentIdInput.value = commentId;
-          // Show the reply form container
           replyFormContainer.style.display = 'block';
         });
       });
@@ -126,32 +135,33 @@
           }
         button.addEventListener('click', () => {
 
-          const commentId = button.getAttribute('data-comment-id');
-          const container = document.querySelector(`.replies-container[data-comment-id="${commentId}"]`);
-          
-          // Check if the container exists before trying to modify its style
-          if (container) {
-            // Toggle the visibility of replies
-            container.style.display = container.style.display === 'none' ? 'block' : 'none';
-          }
+        const commentId = button.getAttribute('data-comment-id');
+        const container = document.querySelector(`.replies-container[data-comment-id="${commentId}"]`);
+        if (container) {
+          container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
         });
       });
 
       // Assume you have like and dislike buttons with classes 'like-button' and 'dislike-button'
       document.addEventListener('DOMContentLoaded', function () {
-        const likeButtons = document.querySelectorAll('.like-button');
+        const likeButtons    = document.querySelectorAll('.like-button');
         const dislikeButtons = document.querySelectorAll('.dislike-button');
 
         likeButtons.forEach(button => {
           button.addEventListener('click', function () {
-            handleLike(this.dataset.commentId);
+            handleLike(this.dataset.commentId, button);
           });
+          const commentId = button.getAttribute('data-comment-id');
+          initLike(commentId);
         });
 
         dislikeButtons.forEach(button => {
           button.addEventListener('click', function () {
-            handleDislike(this.dataset.commentId);
+            handleDislike(this.dataset.commentId, button);
           });
+          const commentId = button.getAttribute('data-comment-id');
+          initDisike(commentId);
         });
 
         function handleLike(commentId) {
@@ -160,10 +170,11 @@
           })
             .then(response => response.json())
             .then(data => {
-              console.log(data)
               if (data.status === 'liked') {
                 updateLikeCount(commentId, data.likes);
-                updateDislikeCount(commentId, data.dislikes)
+                updateLikeStatus(data.status, commentId);
+                updateDislikeCount(commentId, data.dislikes);
+                updateDislikeStatus('not_disliked', commentId);
               } 
             })
             .catch(error => console.error('Error:', error));
@@ -175,10 +186,37 @@
           })
             .then(response => response.json())
             .then(data => {
-              console.log(data)
               if (data.status === 'disliked') {
                 updateLikeCount(commentId, data.likes);
-                updateDislikeCount(commentId, data.dislikes)
+                updateLikeStatus('not-liked', commentId);
+                updateDislikeCount(commentId, data.dislikes);
+                updateDislikeStatus(data.status, commentId);
+              } 
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function initLike(commentId) {
+          fetch(`/like_comment/${commentId}/`, { 
+            method: 'GET'
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'liked') {
+                updateLikeStatus(data.status, commentId)
+              } 
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function initDisike(commentId) {
+          fetch(`/dislike_comment/${commentId}/`, { 
+            method: 'GET'
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.status === 'disliked') {
+                updateDislikeStatus(data.status, commentId)
               } 
             })
             .catch(error => console.error('Error:', error));
@@ -193,12 +231,29 @@
 
         function updateDislikeCount(commentId, dislikes) {
           const dislikeCountElement = document.querySelector(`.dislike-count[data-comment-id="${commentId}"]`);
-          console.log('asadasd')
           if (dislikeCountElement) {
-            console.log('asadasd')
             dislikeCountElement.textContent = dislikes;
           }
         }
+
+        function updateLikeStatus(status, commentId) {
+          const likeButtonElement = document.querySelector(`.like-path[data-comment-id="${commentId}"]`);
+          if (status === 'liked') {
+            likeButtonElement.setAttribute('style', 'fill:green')
+          } else {
+            likeButtonElement.setAttribute('style', 'fill:#222')
+          }
+        }
+
+        function updateDislikeStatus(status, commentId) {
+          const dislikeButtonElement = document.querySelector(`.dislike-path[data-comment-id="${commentId}"]`);
+          if (status === 'disliked') {
+            dislikeButtonElement.setAttribute('style', 'fill:red')
+          } else {
+            dislikeButtonElement.setAttribute('style', 'fill:#222')
+          }
+        }
+
       });
     </script>
     </div>
