@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Recipe, UserProfile, Rating, Comment
+from .models import Recipe, UserProfile, Rating, Comment, User, Follow
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -223,3 +223,19 @@ def rate_recipe(request, recipe_id):
     }
 
     return render(request, 'rate_recipe.html', context)
+
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = User.objects.get(pk=user_id)
+    if request.user.is_authenticated:
+        if user_to_follow != request.user:
+            if request.user.following.filter(following=user_to_follow).exists():
+                request.user.following.filter(following=user_to_follow).delete()
+                return JsonResponse({'status': 'unfollowed'})
+            else:
+                Follow.objects.create(follower=request.user, following=user_to_follow)
+                return JsonResponse({'status': 'followed'})
+        else:
+            return JsonResponse({'status': 'cannot_follow_self'})
+    else:
+        return JsonResponse({'status': 'not_authenticated'})

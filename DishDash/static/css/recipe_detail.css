@@ -24,7 +24,16 @@
    display: flex;
    flex-direction: row;
    text-align: center;
+   padding: 10px;
+   justify-content: space-between;
    background-color: crimson;
+}
+
+.recipe-detail-header {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-between;
 }
 
 /* Style for the recipe description */
@@ -186,11 +195,17 @@
 
 .like-svg:hover {
     cursor:pointer;
-    fill: green;
 }
 
 .dislike-svg:hover {
     cursor:pointer;
+}
+
+.like-svg:hover > .like-path {
+    fill: green;
+}
+
+.dislike-svg:hover > .dislike-path {
     fill: red;
 }
 

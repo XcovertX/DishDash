@@ -2,7 +2,20 @@
 {% load static %}
 {% block content %}
   <div class="recipe-detail">
-    <h2 class="recipe-title">{{ recipe.title }}</h2>
+    <div class="recipe-detail-header">
+      <h2 class="recipe-title">{{ recipe.title }}</h2>
+      {% if user.is_authenticated %}
+        {% if user != recipe.user %}
+          <button class="follow-button" data-user-id="{{ recipe.user.id }}">
+              {% if user in recipe.user.following.all %}
+                Unfollow
+              {% else %}
+                Follow
+              {% endif %} 
+          </button>
+        {% endif %}
+      {% endif %}
+    </div>
     {% if recipe.image %}
       <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
     {% endif %}
@@ -118,6 +131,37 @@
       const parentCommentIdInput  = document.getElementById('parent-comment-id');
       const likeButtons           = document.querySelectorAll('.like-button');
       const dislikeButtons        = document.querySelectorAll('.dislike-button');
+      const followButtons          = document.querySelectorAll('.follow-button');
+
+      followButtons.forEach(followButton => {
+        followButton.addEventListener('click', () => {
+          const user_id = followButton.getAttribute('data-user-id');
+
+          fetch(`/follow/${user_id}/`,{
+            method: 'POST'
+          })
+          .then(response => {        
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('follsssssssssssssssow', data);
+              // Handle the response data and update the UI
+              if (data.status === 'followed') {
+                  followButton.textContent = 'Unfollow';
+              } else if (data.status === 'unfollowed') {
+                  followButton.textContent = 'Follow';
+              }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+        });
+      });
+
+ 
     
       replyButtons.forEach(button => {
         button.addEventListener('click', () => {
