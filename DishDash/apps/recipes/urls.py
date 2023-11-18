@@ -5,7 +5,7 @@ from .views import follow_user, recipe_list, recipe_detail, home, profile, signu
 
 urlpatterns = [
     path('recipes/', recipe_list, name='recipe_list'),
-    path('/', home, name='home'),
+    path('', home, name='home'),
     path('profile/', profile, name='profile'),
     path('signup/', signup, name='signup'),
     path('login/', login, name='login'),

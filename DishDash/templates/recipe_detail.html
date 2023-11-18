@@ -3,7 +3,10 @@
 {% block content %}
   <div class="recipe-detail">
     <div class="recipe-detail-header">
-      <h2 class="recipe-title">{{ recipe.title }}</h2>
+      <div class="recipe-header-title">
+        <h1 class="recipe-title">{{ recipe.title }}</h1>
+        <h2 class="recipe-sub-title">By {{ recipe.user.username }}</h2>
+      </div>
       {% if user.is_authenticated %}
         {% if user != recipe.user %}
           <button class="follow-button" data-user-id="{{ recipe.user.id }}">
@@ -29,7 +32,7 @@
           <a href="{% url 'rate_recipe' recipe.id %}" class="rate-link">Rate this recipe</a>
         {% endif %}
       {% endif %}
-      <p class="average-rating">Average Rating: {{ recipe.average_rating }} stars</p>
+      {% include 'stars.html' with average_rating=recipe.average_rating %}
     </div>
     <p class="recipe-description">{{ recipe.description }}</p>
     
@@ -131,7 +134,7 @@
       const parentCommentIdInput  = document.getElementById('parent-comment-id');
       const likeButtons           = document.querySelectorAll('.like-button');
       const dislikeButtons        = document.querySelectorAll('.dislike-button');
-      const followButtons          = document.querySelectorAll('.follow-button');
+      const followButtons         = document.querySelectorAll('.follow-button');
 
       followButtons.forEach(followButton => {
         followButton.addEventListener('click', () => {
@@ -147,7 +150,6 @@
             return response.json();
           })
           .then(data => {
-            console.log('follsssssssssssssssow', data);
               // Handle the response data and update the UI
               if (data.status === 'followed') {
                   followButton.textContent = 'Unfollow';

@@ -1,0 +1,29 @@
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'icons/star-empty.svg' %}">
+    <link rel="stylesheet" href="{% static 'icons/star-half.svg' %}">
+    <link rel="stylesheet" href="{% static 'icons/star-full.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+</head>
+<p class="average-rating" data-rating-id="{{ recipe.average_rating }}">
+    Average Rating: {{ recipe.average_rating }}
+    <span class="str" id="average-rating" data-rating-id="{{ recipe.average_rating }}">
+
+    </span>
+</p>
+<script>
+    
+    const averageRatingContainer = document.getElementById('average-rating');
+    const averageRating = averageRatingContainer.getAttribute('data-rating-id');
+    console.log(averageRating)
+    const fullStars = Math.floor(averageRating);
+    const hasHalfStar = averageRating % 1 !== 0;
+    const fullStarHTML = '<img class="star" src="{% static "icons/star-full.svg" %}" alt="Full Star">';
+    const halfStarHTML = hasHalfStar ? '<img class="star" src="{% static "icons/star-half.svg" %}" alt="Half Star">' : '';
+    const emptyStarHTML = '<img class="star" src="{% static "icons/star-empty.svg" %}" alt="Empty Star">';
+    const emptyStarsCount = Math.floor(5 - averageRating);
+    const starsHTML = `${fullStarHTML.repeat(fullStars)}${halfStarHTML}${emptyStarHTML.repeat(emptyStarsCount)}`;
+    averageRatingContainer.innerHTML = starsHTML;
+
+</script>
