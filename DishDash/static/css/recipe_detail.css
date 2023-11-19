@@ -8,6 +8,8 @@
 /* Style for the recipe title */
 .recipe-header-title {
     background-color: red;
+    width: 100%;
+    display: inline;
 }
 
 .recipe-title {
@@ -15,6 +17,8 @@
     font-weight: bold;
     text-align: left;
     background-color: #45a049;
+    display: inline;
+    
 }
 
 .recipe-sub-title {
@@ -33,12 +37,6 @@
 
 /* Style for views and rating */
 .recipe-stats {
-   display: flex;
-   flex-direction: row;
-   text-align: center;
-   padding: 10px;
-   justify-content: space-between;
-   background-color: crimson;
 }
 
 .recipe-detail-header {
@@ -47,6 +45,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: aqua;
+    height: auto;
 }
 
 /* Style for the recipe description */
@@ -67,6 +66,7 @@
     padding-inline: 15px;
     padding-block: 5px;
     background-color: #CCC;
+    height: 100%;
 }
 
 /* Style for each comment */

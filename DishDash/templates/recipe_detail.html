@@ -23,16 +23,7 @@
       <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" class="recipe-image">
     {% endif %}
     <div class="recipe-stats">
-      <p class="recipe-views">Views: {{ recipe.views }}</p>
-      {% if user.is_authenticated %}
-        {% if user_rating %}
-          <p class="user-rating">Your Rating: {{ user_rating.stars }} stars</p>
-        {% else %}
-          <p class="user-rating">You haven't rated this recipe yet.</p>
-          <a href="{% url 'rate_recipe' recipe.id %}" class="rate-link">Rate this recipe</a>
-        {% endif %}
-      {% endif %}
-      {% include 'stars.html' with average_rating=recipe.average_rating %}
+      {% include 'stars.html' %}
     </div>
     <p class="recipe-description">{{ recipe.description }}</p>
     

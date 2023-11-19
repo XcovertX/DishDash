@@ -24,22 +24,45 @@ body {
 }
 
 .header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .navbar {
     background-color: #555;
     color: #fff;
-    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    width: 100%;
 }
 
 .navbar a {
     color: #fff;
     text-decoration: none;
     margin: 0 15px;
+    border-width: 2px;
+    border-color: #fff;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.navbar-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.navbar-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
 }
 
 .content {
