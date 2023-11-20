@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <h1>Dish Dash!</h1>
-    <h2>Trending Recipes</h2>
-    <ul>
-    {% for recipe in trending_recipes %}
-        <li>
-            <a href="{% url 'recipe_detail' recipe.id %}">{{ recipe.title }}</a>
-            by {{ recipe.user.username }}
-        </li>
-    {% endfor %}
-    </ul>
-{% endblock %}
+  <div id="home-container">
+    <div id="home-header">
+        Dish Dash!
+    </div>
+    <div class="recipe-section">
+        <h2>Trending Recipes</h2>
+        <div class="recipe-list">
+            {% for recipe in trending_recipes %}
+            {% include 'recipe_card.html' with recipe=recipe %}
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+{% endblock %} 
