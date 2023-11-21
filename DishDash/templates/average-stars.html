@@ -1,0 +1,25 @@
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'icons/star-empty.svg' %}">
+    <link rel="stylesheet" href="{% static 'icons/star-half.svg' %}">
+    <link rel="stylesheet" href="{% static 'icons/star-full.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+</head>
+<div class="rating-{{ index }}" data-rating-id="{{ rating }}">
+    <span id="rating-{{ index }}" data-rating-id="{{ rating }}"></span>
+</div>
+
+<script index="{{ index }}">
+    let averageRatingContainer = document.getElementById(`rating-{{ index }}`);
+    let averageRating = averageRatingContainer.getAttribute('data-rating-id');
+    let fullStars = Math.floor(averageRating);
+    let hasHalfStar = averageRating % 1 !== 0;
+    let fullStarHTML = '<img class="star" src="{% static "icons/star-full.svg" %}" alt="Full Star">';
+    let halfStarHTML = hasHalfStar ? '<img class="star" src="{% static "icons/star-half.svg" %}" alt="Half Star">' : '';
+    let emptyStarHTML = '<img class="star" src="{% static "icons/star-empty.svg" %}" alt="Empty Star">';
+    let emptyStarsCount = Math.floor(5 - averageRating);
+    let starsHTML = `${fullStarHTML.repeat(fullStars)}${halfStarHTML}${emptyStarHTML.repeat(emptyStarsCount)}`;
+    averageRatingContainer.innerHTML = starsHTML;
+
+</script>

@@ -1,16 +1,19 @@
 
 <head>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+  <link rel="stylesheet" href="{% static 'icons/star-empty.svg' %}">
+  <link rel="stylesheet" href="{% static 'icons/star-half.svg' %}">
+  <link rel="stylesheet" href="{% static 'icons/star-full.svg' %}">
+  <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+
 </head>
-<div class="recipe-card">
-    <div class="recipe-info">
-        <h3>{{ recipe.title }}</h3>
+<script src="{% static 'components/rating_stars.js' %}"></script>
+<a class="recipe-card" href="{% url 'recipe_detail' recipe_id=recipe.id %}">
+    <h3>{{ recipe.title }}</h3>
+    <div>
         <p>Views: {{ recipe.views }}</p>
-        <p>Average Rating: {{ recipe.average_rating }}</p>
+        <p>{{ recipe.average_rating }}/5</p>
+        {% include 'rating_stars.html' with rating=recipe.average_rating %}
     </div>
-    <div class="recipe-actions">
-        <!-- Add any additional actions or buttons here -->
-        <a href="{% url 'recipe_detail' recipe_id=recipe.id %}">View Recipe</a>
-    </div>
-</div>
+</a>

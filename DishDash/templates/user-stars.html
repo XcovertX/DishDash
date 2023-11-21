@@ -1,0 +1,21 @@
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'icons/star-empty.svg' %}">
+    <link rel="stylesheet" href="{% static 'icons/star-full.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
+</head>
+<div class="user-rating" data-rating-id="{{ rating }}">
+    <span id="user-rating" data-rating-id="{{ rating }}"></span>
+</div>
+
+<script>
+    const userRatingContainer = document.getElementById('user-rating');
+    const userRating = userRatingContainer.getAttribute('data-rating-id');
+    const userFullStars = Math.floor(userRating);
+    const userFullStarHTML = '<img class="star" src="{% static "icons/star-full.svg" %}" alt="Full Star">';
+    const userEmptyStarHTML = '<img class="star" src="{% static "icons/star-empty.svg" %}" alt="Empty Star">';
+    const userEmptyStarsCount = Math.floor(5 - userRating);
+    const userStarsHTML = `${fullStarHTML.repeat(userFullStars)}${userEmptyStarHTML.repeat(userEmptyStarsCount)}`;
+    userRatingContainer.innerHTML = userStarsHTML;
+</script>
